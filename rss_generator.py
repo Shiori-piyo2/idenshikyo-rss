@@ -64,7 +64,7 @@ for item in items:
     fe.id(item["link"])
     fe.title(item["title"])
     fe.link(href=item["link"])
-    fe.description(item["date"])
+　  fe.description(item["title"])
     fe.pubDate(datetime.now(timezone.utc))
 
 fg.rss_file("feed.xml")
