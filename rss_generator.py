@@ -11,39 +11,20 @@ def get_items():
     html = requests.get(BASE_URL, timeout=30).text
     soup = BeautifulSoup(html, "html.parser")
 
-    items = []
-
     tables = soup.find_all("table", class_="c-list_news")
 
-    for table in tables:
+    for i, table in enumerate(tables, start=1):
+
+        print("=" * 50)
+        print("TABLE", i)
+        print("=" * 50)
+
         rows = table.find_all("tr")
 
-        for row in rows:
-            date_tag = row.find("th")
-            link_tag = row.find("a", href=True)
+        for row in rows[:3]:
+            print(row.get_text(" ", strip=True))
 
-            if not link_tag:
-                continue
-
-            date_text = date_tag.get_text(" ", strip=True) if date_tag else ""
-
-            title = link_tag.get_text(" ", strip=True)
-
-            link = urljoin(BASE_URL, link_tag["href"])
-
-            category = "おしらせ"
-
-            if "gmo_news" in link:
-                category = "委員会通信"
-
-            items.append({
-                "date": date_text,
-                "title": f"【{category}】{title}",
-                "link": link
-            })
-
-    return items
-
+    return []
 
 items = get_items()
 
