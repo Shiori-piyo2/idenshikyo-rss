@@ -4,4 +4,4 @@ url = "https://www.idenshikyo.jp/"
 
 response = requests.get(url, timeout=30)
 
-print(response.text)
+print(response.text[:3000])
