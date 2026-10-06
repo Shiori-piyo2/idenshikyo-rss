@@ -31,7 +31,7 @@ def get_items():
 
             date_text = date_tag.get_text(" ", strip=True) if date_tag else ""
 
-            title = link_tag.get_text(" ", strip=True)
+            title = row.get_text(" ", strip=True)
 
             link = urljoin(BASE_URL, link_tag["href"])
 
