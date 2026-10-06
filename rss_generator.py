@@ -11,20 +11,43 @@ def get_items():
     html = requests.get(BASE_URL, timeout=30).text
     soup = BeautifulSoup(html, "html.parser")
 
+    items = []
+
     tables = soup.find_all("table", class_="c-list_news")
 
-    for i, table in enumerate(tables, start=1):
+    # TABLE1=おしらせ、TABLE2=委員会通信
+    target_tables = tables[:2]
 
-        print("=" * 50)
-        print("TABLE", i)
-        print("=" * 50)
+    for table in target_tables:
 
         rows = table.find_all("tr")
 
-        for row in rows[:3]:
-            print(row.get_text(" ", strip=True))
+        for row in rows:
+            date_tag = row.find("th")
+            link_tag = row.find("a", href=True)
 
-    return []
+            if not link_tag:
+                continue
+
+            date_text = date_tag.get_text(" ", strip=True) if date_tag else ""
+
+            title = link_tag.get_text(" ", strip=True)
+
+            link = urljoin(BASE_URL, link_tag["href"])
+
+            category = "おしらせ"
+
+            if "gmo_news" in link:
+                category = "委員会通信"
+
+            items.append({
+                "date": date_text,
+                "title": f"【{category}】{title}",
+                "link": link
+            })
+
+    return items
+
 
 items = get_items()
 
@@ -42,9 +65,9 @@ for item in items:
     fe.title(item["title"])
     fe.link(href=item["link"])
     fe.description(item["date"])
-
     fe.pubDate(datetime.now(timezone.utc))
 
 fg.rss_file("feed.xml")
 
 print(f"RSS作成完了: {len(items)}件")
+``
