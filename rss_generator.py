@@ -70,4 +70,3 @@ for item in items:
 fg.rss_file("feed.xml")
 
 print(f"RSS作成完了: {len(items)}件")
-``
