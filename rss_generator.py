@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from feedgen.feed import FeedGenerator
 from urllib.parse import urljoin
-from datetime import datetime
+from datetime import datetime, timezone
 
 BASE_URL = "https://www.idenshikyo.jp/"
 
@@ -62,7 +62,7 @@ for item in items:
     fe.link(href=item["link"])
     fe.description(item["date"])
 
-    fe.pubDate(datetime.now())
+    fe.pubDate(datetime.now(timezone.utc))
 
 fg.rss_file("feed.xml")
 
